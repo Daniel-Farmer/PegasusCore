@@ -1,111 +1,212 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#0a0a0a"/>
-      <stop offset="100%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#111118"/>
     </linearGradient>
     <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#3b82f6"/>
       <stop offset="50%" style="stop-color:#8b5cf6"/>
       <stop offset="100%" style="stop-color:#06b6d4"/>
     </linearGradient>
-    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3"/>
-      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.15"/>
-      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0"/>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.08"/>
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:0"/>
     </linearGradient>
   </defs>
 
   <!-- Background -->
-  <rect width="1200" height="400" fill="url(#bg)" rx="12"/>
+  <rect width="1200" height="1600" fill="url(#bg)" rx="12"/>
 
-  <!-- Subtle grid pattern -->
-  <g opacity="0.04" stroke="#fff" stroke-width="0.5">
-    <line x1="0" y1="50" x2="1200" y2="50"/>
-    <line x1="0" y1="100" x2="1200" y2="100"/>
-    <line x1="0" y1="150" x2="1200" y2="150"/>
-    <line x1="0" y1="200" x2="1200" y2="200"/>
-    <line x1="0" y1="250" x2="1200" y2="250"/>
-    <line x1="0" y1="300" x2="1200" y2="300"/>
-    <line x1="0" y1="350" x2="1200" y2="350"/>
-    <line x1="100" y1="0" x2="100" y2="400"/>
-    <line x1="200" y1="0" x2="200" y2="400"/>
-    <line x1="300" y1="0" x2="300" y2="400"/>
-    <line x1="400" y1="0" x2="400" y2="400"/>
-    <line x1="500" y1="0" x2="500" y2="400"/>
-    <line x1="600" y1="0" x2="600" y2="400"/>
-    <line x1="700" y1="0" x2="700" y2="400"/>
-    <line x1="800" y1="0" x2="800" y2="400"/>
-    <line x1="900" y1="0" x2="900" y2="400"/>
-    <line x1="1000" y1="0" x2="1000" y2="400"/>
-    <line x1="1100" y1="0" x2="1100" y2="400"/>
-  </g>
+  <!-- Top glow -->
+  <ellipse cx="600" cy="0" rx="600" ry="300" fill="url(#glow)"/>
 
-  <!-- Glow effect -->
-  <ellipse cx="600" cy="160" rx="400" ry="120" fill="url(#glow)"/>
+  <!-- ===== HEADER ===== -->
 
-  <!-- Pegasus icon -->
-  <g transform="translate(520, 45) scale(0.9)" fill="url(#accent)">
-    <path d="M80 10 C60 10 40 25 35 45 C30 60 35 75 45 85 L30 110 C28 115 32 120 37 118 L55 110 C65 118 78 120 90 115 C110 108 120 88 115 68 L130 50 C132 47 130 43 127 42 L110 38 C105 22 95 10 80 10Z M70 50 A6 6 0 1 1 70 62 A6 6 0 1 1 70 50Z" opacity="0.9"/>
-    <path d="M45 85 C35 95 20 100 10 95 C5 93 5 88 10 87 C20 85 30 78 35 70" fill="none" stroke="url(#accent)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
-    <path d="M90 30 C100 20 115 18 125 25" fill="none" stroke="url(#accent)" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-    <path d="M85 25 C92 12 108 8 120 15" fill="none" stroke="url(#accent)" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
-  </g>
-
-  <!-- Title -->
-  <text x="600" y="200" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#ffffff" letter-spacing="-1">
-    Pegasus Core
+  <!-- Logo text -->
+  <text x="600" y="100" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="64" font-weight="800" fill="url(#accent)" letter-spacing="-2">
+    PEGASUS CORE
   </text>
 
   <!-- Accent line -->
-  <rect x="480" y="218" width="240" height="2" rx="1" fill="url(#accent)" opacity="0.6"/>
+  <rect x="460" y="118" width="280" height="2" rx="1" fill="url(#accent)" opacity="0.4"/>
 
   <!-- Tagline -->
-  <text x="600" y="252" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" fill="#a1a1aa" letter-spacing="0.5">
+  <text x="600" y="152" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" fill="#a1a1aa" letter-spacing="0.5">
     Ship production-ready AI apps fast
   </text>
 
+  <!-- Description -->
+  <text x="600" y="190" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#71717a">
+    A pre-wired Next.js 15 starter kit with Supabase auth, Postgres + pgvector,
+  </text>
+  <text x="600" y="210" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#71717a">
+    AI chat via Bifrost, and visual agent pipelines via Flowise.
+  </text>
+  <text x="600" y="245" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#52525b" font-style="italic">
+    Ships with CLAUDE.md so AI coding tools understand your entire stack — vibe code from day one.
+  </text>
+
   <!-- Tech stack pills -->
-  <g transform="translate(600, 290)" text-anchor="middle" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', monospace" font-size="12.5">
-    <!-- Next.js -->
-    <g transform="translate(-440, 0)">
-      <rect x="-52" y="-14" width="104" height="28" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+  <g transform="translate(600, 290)" text-anchor="middle" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', monospace" font-size="12">
+    <g transform="translate(-390, 0)">
+      <rect x="-48" y="-13" width="96" height="26" rx="13" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1"/>
       <text y="4" fill="#e4e4e7">Next.js 15</text>
     </g>
-    <!-- Supabase -->
-    <g transform="translate(-290, 0)">
-      <rect x="-52" y="-14" width="104" height="28" rx="14" fill="#3ecf8e" fill-opacity="0.08" stroke="#3ecf8e" stroke-opacity="0.2" stroke-width="1"/>
+    <g transform="translate(-260, 0)">
+      <rect x="-45" y="-13" width="90" height="26" rx="13" fill="#3ecf8e" fill-opacity="0.08" stroke="#3ecf8e" stroke-opacity="0.2" stroke-width="1"/>
       <text y="4" fill="#3ecf8e">Supabase</text>
     </g>
-    <!-- pgvector -->
-    <g transform="translate(-145, 0)">
-      <rect x="-48" y="-14" width="96" height="28" rx="14" fill="#8b5cf6" fill-opacity="0.08" stroke="#8b5cf6" stroke-opacity="0.2" stroke-width="1"/>
+    <g transform="translate(-135, 0)">
+      <rect x="-42" y="-13" width="84" height="26" rx="13" fill="#8b5cf6" fill-opacity="0.08" stroke="#8b5cf6" stroke-opacity="0.2" stroke-width="1"/>
       <text y="4" fill="#a78bfa">pgvector</text>
     </g>
-    <!-- Bifrost -->
     <g transform="translate(0, 0)">
-      <rect x="-42" y="-14" width="84" height="28" rx="14" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-opacity="0.2" stroke-width="1"/>
+      <rect x="-38" y="-13" width="76" height="26" rx="13" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-opacity="0.2" stroke-width="1"/>
       <text y="4" fill="#60a5fa">Bifrost</text>
     </g>
-    <!-- Flowise -->
-    <g transform="translate(140, 0)">
-      <rect x="-46" y="-14" width="92" height="28" rx="14" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-opacity="0.2" stroke-width="1"/>
+    <g transform="translate(125, 0)">
+      <rect x="-40" y="-13" width="80" height="26" rx="13" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-opacity="0.2" stroke-width="1"/>
       <text y="4" fill="#fbbf24">Flowise</text>
     </g>
-    <!-- Tailwind -->
-    <g transform="translate(285, 0)">
-      <rect x="-48" y="-14" width="96" height="28" rx="14" fill="#06b6d4" fill-opacity="0.08" stroke="#06b6d4" stroke-opacity="0.2" stroke-width="1"/>
+    <g transform="translate(252, 0)">
+      <rect x="-42" y="-13" width="84" height="26" rx="13" fill="#06b6d4" fill-opacity="0.08" stroke="#06b6d4" stroke-opacity="0.2" stroke-width="1"/>
       <text y="4" fill="#22d3ee">Tailwind</text>
     </g>
-    <!-- Vercel -->
-    <g transform="translate(430, 0)">
-      <rect x="-42" y="-14" width="84" height="28" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+    <g transform="translate(380, 0)">
+      <rect x="-38" y="-13" width="76" height="26" rx="13" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1"/>
       <text y="4" fill="#e4e4e7">Vercel</text>
     </g>
   </g>
 
-  <!-- Bottom tagline -->
-  <text x="600" y="355" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#52525b" letter-spacing="0.3">
-    Auth + Database + Storage + Vector Search + AI Chat + Agent Pipelines — all pre-wired
+  <!-- Divider -->
+  <line x1="100" y1="340" x2="1100" y2="340" stroke="#27272a" stroke-width="1"/>
+
+  <!-- ===== WHAT'S INCLUDED ===== -->
+
+  <text x="100" y="390" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#ffffff">
+    What's Included
+  </text>
+
+  <g font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#a1a1aa">
+    <text x="120" y="425"><tspan fill="#3b82f6">&#x25CF;</tspan>  Auth flow — sign up, sign in, sign out, email confirmation, protected routes</text>
+    <text x="120" y="452"><tspan fill="#3ecf8e">&#x25CF;</tspan>  Database CRUD — notes demo with Row Level Security (RLS)</text>
+    <text x="120" y="479"><tspan fill="#8b5cf6">&#x25CF;</tspan>  File storage — upload, download, list, delete via Supabase Storage</text>
+    <text x="120" y="506"><tspan fill="#06b6d4">&#x25CF;</tspan>  Vector search — embeddings and semantic similarity via pgvector</text>
+    <text x="120" y="533"><tspan fill="#60a5fa">&#x25CF;</tspan>  AI chat — streaming chat via Bifrost gateway (OpenAI-compatible)</text>
+    <text x="120" y="560"><tspan fill="#fbbf24">&#x25CF;</tspan>  AI agents — interact with Flowise chatflows from the app</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="100" y1="595" x2="1100" y2="595" stroke="#27272a" stroke-width="1"/>
+
+  <!-- ===== QUICK START ===== -->
+
+  <text x="100" y="645" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#ffffff">
+    Quick Start
+  </text>
+
+  <!-- Step 1 -->
+  <text x="100" y="685" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#e4e4e7">
+    1. Clone and install
+  </text>
+  <g transform="translate(100, 700)">
+    <rect width="600" height="72" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <text x="16" y="26" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', monospace" font-size="13" fill="#a1a1aa">
+      <tspan fill="#52525b">$</tspan> git clone https://github.com/Daniel-Farmer/PegasusCore.git
+    </text>
+    <text x="16" y="46" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', monospace" font-size="13" fill="#a1a1aa">
+      <tspan fill="#52525b">$</tspan> cd PegasusCore &amp;&amp; npm install
+    </text>
+  </g>
+
+  <!-- Step 2 -->
+  <text x="100" y="800" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#e4e4e7">
+    2. Configure environment
+  </text>
+  <g transform="translate(100, 815)">
+    <rect width="600" height="48" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <text x="16" y="30" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', monospace" font-size="13" fill="#a1a1aa">
+      <tspan fill="#52525b">$</tspan> cp .env.local.example .env.local
+    </text>
+  </g>
+  <text x="100" y="888" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#71717a">
+    Fill in your Supabase URL and publishable key from your Supabase dashboard.
+  </text>
+
+  <!-- Step 3 -->
+  <text x="100" y="925" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#e4e4e7">
+    3. Run migrations + create storage bucket
+  </text>
+  <text x="100" y="950" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#71717a">
+    Run the SQL files in supabase/migrations/ via your Supabase SQL editor.
+  </text>
+  <text x="100" y="970" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#71717a">
+    Create a storage bucket called "files" in your Supabase dashboard.
+  </text>
+
+  <!-- Step 4 -->
+  <text x="100" y="1010" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#e4e4e7">
+    4. Start everything
+  </text>
+  <g transform="translate(100, 1025)">
+    <rect width="600" height="48" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <text x="16" y="30" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', monospace" font-size="13" fill="#a1a1aa">
+      <tspan fill="#52525b">$</tspan> npm run dev
+    </text>
+  </g>
+
+  <!-- Services table -->
+  <g transform="translate(100, 1095)">
+    <!-- Header -->
+    <rect width="600" height="32" rx="6" fill="#18181b"/>
+    <text x="20" y="21" font-family="ui-monospace, 'SF Mono', monospace" font-size="12" font-weight="600" fill="#71717a">SERVICE</text>
+    <text x="200" y="21" font-family="ui-monospace, 'SF Mono', monospace" font-size="12" font-weight="600" fill="#71717a">URL</text>
+    <text x="420" y="21" font-family="ui-monospace, 'SF Mono', monospace" font-size="12" font-weight="600" fill="#71717a">PURPOSE</text>
+    <!-- Row 1 -->
+    <text x="20" y="56" font-family="ui-monospace, 'SF Mono', monospace" font-size="12.5" fill="#e4e4e7">Next.js</text>
+    <text x="200" y="56" font-family="ui-monospace, 'SF Mono', monospace" font-size="12.5" fill="#a1a1aa">localhost:3000</text>
+    <text x="420" y="56" font-family="system-ui, sans-serif" font-size="12.5" fill="#71717a">App + API</text>
+    <!-- Row 2 -->
+    <text x="20" y="82" font-family="ui-monospace, 'SF Mono', monospace" font-size="12.5" fill="#60a5fa">Bifrost</text>
+    <text x="200" y="82" font-family="ui-monospace, 'SF Mono', monospace" font-size="12.5" fill="#a1a1aa">localhost:8080</text>
+    <text x="420" y="82" font-family="system-ui, sans-serif" font-size="12.5" fill="#71717a">AI gateway</text>
+    <!-- Row 3 -->
+    <text x="20" y="108" font-family="ui-monospace, 'SF Mono', monospace" font-size="12.5" fill="#fbbf24">Flowise</text>
+    <text x="200" y="108" font-family="ui-monospace, 'SF Mono', monospace" font-size="12.5" fill="#a1a1aa">localhost:3001</text>
+    <text x="420" y="108" font-family="system-ui, sans-serif" font-size="12.5" fill="#71717a">Agent builder</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="100" y1="1240" x2="1100" y2="1240" stroke="#27272a" stroke-width="1"/>
+
+  <!-- ===== PROJECT STRUCTURE ===== -->
+
+  <text x="100" y="1285" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#ffffff">
+    Project Structure
+  </text>
+
+  <g transform="translate(100, 1300)">
+    <rect width="700" height="210" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <g font-family="ui-monospace, 'SF Mono', 'Cascadia Code', monospace" font-size="12.5" fill="#a1a1aa">
+      <text x="16" y="24" fill="#71717a">app/</text>
+      <text x="16" y="44">  (auth)/           <tspan fill="#52525b"># login, signup, email confirm</tspan></text>
+      <text x="16" y="64">  (protected)/      <tspan fill="#52525b"># dashboard, notes, files, search, chat, agents</tspan></text>
+      <text x="16" y="84">  api/              <tspan fill="#52525b"># chat, embeddings, agents, setup</tspan></text>
+      <text x="16" y="110" fill="#71717a">lib/</text>
+      <text x="16" y="130">  supabase/         <tspan fill="#52525b"># browser + server clients, middleware</tspan></text>
+      <text x="16" y="150">  bifrost.ts        <tspan fill="#52525b"># OpenAI SDK with baseURL override</tspan></text>
+      <text x="16" y="170">  flowise.ts        <tspan fill="#52525b"># FlowiseClient SDK</tspan></text>
+      <text x="16" y="190">  storage.ts        <tspan fill="#52525b"># Supabase Storage helpers</tspan></text>
+    </g>
+  </g>
+
+  <!-- ===== FOOTER ===== -->
+
+  <text x="600" y="1555" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#3f3f46">
+    MIT License
+  </text>
+  <text x="600" y="1580" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12" fill="#27272a">
+    Deploy on Vercel  &#x2022;  Bifrost + Flowise need separate hosting for production
   </text>
 </svg>
