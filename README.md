@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pegasus Starter Pack
 
-## Getting Started
+A production-ready full-stack starter template for **any project**. Fork it, configure it, ship it.
 
-First, run the development server:
+## Stack
+
+| Layer | Tool | What it does |
+|-------|------|-------------|
+| **AI Gateway** | [Bifrost](https://github.com/maximhq/bifrost) | Routes models, caches, optimises — 15+ providers via one OpenAI-compatible API |
+| **AI Agents** | [Flowise](https://github.com/FlowiseAI/Flowise) | Visual AI pipelines — drag-and-drop agents, RAG, multi-step workflows |
+| **Backend** | [Supabase](https://supabase.com) | Database (Postgres), auth, storage, and vector DB (pgvector) |
+| **Frontend** | [Next.js](https://nextjs.org) + [Tailwind](https://tailwindcss.com) | React server components, TypeScript, shadcn/ui |
+| **Hosting** | [Vercel](https://vercel.com) | Zero-config deployment with edge functions |
+
+## What's Included
+
+- **Auth flow** — Sign up, sign in, sign out, email confirmation, protected routes
+- **Database CRUD** — Notes demo with Row Level Security (RLS)
+- **File storage** — Upload, download, list, delete files via Supabase Storage
+- **Vector search** — Store embeddings and semantic similarity search via pgvector
+- **AI chat** — Streaming chat via Bifrost gateway (OpenAI-compatible)
+- **AI agents** — Interact with Flowise chatflows from the app
+
+## Prerequisites
+
+- Node.js 18+
+- A [Supabase](https://database.new) project
+- (Optional) An AI provider API key (OpenAI, Anthropic, etc.) for Bifrost
+
+## Quick Start
+
+### 1. Clone and install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-org/pegasus-starter-pack.git
+cd pegasus-starter-pack
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configure environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.local.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Fill in your Supabase URL and publishable key from your [Supabase dashboard](https://supabase.com/dashboard).
 
-## Learn More
+### 3. Run database migrations
 
-To learn more about Next.js, take a look at the following resources:
+Run the SQL files in `supabase/migrations/` in your Supabase SQL editor (Dashboard > SQL Editor), in order:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. `00001_create_notes_table.sql` — Notes table with RLS
+2. `00002_create_documents_table.sql` — Documents table with pgvector for embeddings
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Create a storage bucket
 
-## Deploy on Vercel
+In your Supabase dashboard, go to Storage and create a bucket called `files`. Enable RLS policies as needed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 5. Start services
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Terminal 1 — Next.js
+npm run dev
+
+# Terminal 2 — Bifrost AI gateway
+npx -y @maximhq/bifrost
+# Open http://localhost:8080 to configure AI providers
+
+# Terminal 3 — Flowise (optional)
+npx flowise start
+# Open http://localhost:3000 to build chatflows
+```
+
+### 6. Open the app
+
+Visit [http://localhost:3000](http://localhost:3000) (or port 3001 if Flowise is on 3000).
+
+## Project Structure
+
+```
+├── app/
+│   ├── (auth)/              # Public auth pages (login, signup, email confirm)
+│   ├── (protected)/         # Auth-required pages
+│   │   ├── dashboard/       # Overview of all integrations
+│   │   ├── notes/           # CRUD demo (Supabase DB)
+│   │   ├── files/           # File upload demo (Supabase Storage)
+│   │   ├── search/          # Semantic search (pgvector)
+│   │   ├── chat/            # AI chat (Bifrost streaming)
+│   │   └── agents/          # AI agents (Flowise)
+│   └── api/                 # API routes (chat, embeddings, agents)
+├── lib/
+│   ├── supabase/            # Supabase client (browser, server, middleware)
+│   ├── bifrost.ts           # Bifrost client (OpenAI SDK with baseURL)
+│   ├── flowise.ts           # Flowise client
+│   ├── storage.ts           # Supabase Storage helpers
+│   └── types/               # TypeScript types
+├── components/              # shadcn/ui + shared components
+├── middleware.ts             # Auth session refresh
+└── supabase/migrations/     # SQL migrations
+```
+
+## Deployment
+
+### Vercel
+
+1. Push to GitHub
+2. Import project on [Vercel](https://vercel.com/new)
+3. Set environment variables in Vercel dashboard
+4. Deploy
+
+Bifrost and Flowise need separate hosting (Docker, Railway, etc.) for production.
+
+## Customization
+
+- **Add a new protected page**: Create a folder in `app/(protected)/your-page/page.tsx`
+- **Add a database table**: Create a migration in `supabase/migrations/`, add types to `lib/types/database.ts`
+- **Change AI model**: Update the `model` field in `app/api/chat/route.ts`, or configure in Bifrost UI
+- **Add a new Flowise agent**: Build it in the Flowise UI, grab the chatflow ID, use it in the agents page
+
+## License
+
+MIT

@@ -1,1 +1,52 @@
-@AGENTS.md
+# CLAUDE.md — AI Development Guide
+
+## Project Overview
+Pegasus Starter Pack — a universal full-stack starter template.
+
+## Tech Stack
+- Next.js 15 (App Router, Server Components, TypeScript strict)
+- Supabase (`@supabase/ssr` + `@supabase/supabase-js`) — auth, DB, storage, pgvector
+- Bifrost (github.com/maximhq/bifrost) — AI gateway, OpenAI-compatible API
+- Flowise (`flowise-sdk`) — visual AI agent builder
+- Tailwind CSS + shadcn/ui
+- Vercel — deployment target
+
+## Key Patterns
+
+### Authentication
+- Use `getUser()` for server-side auth validation (validates JWT against Supabase)
+- Browser client: `lib/supabase/client.ts` (singleton via createBrowserClient)
+- Server client: `lib/supabase/server.ts` (per-request via createServerClient with cookies)
+- Session refresh: `middleware.ts` → `lib/supabase/middleware.ts`
+- Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+
+### Database
+- All tables must have RLS enabled
+- Use `(select auth.uid())` in RLS policies for performance (cached per-statement)
+- Types in `lib/types/database.ts`
+
+### Storage
+- Helpers in `lib/storage.ts` — upload, download, list, delete
+- Uses `files` bucket — create it in Supabase dashboard with RLS
+
+### Vector Search (pgvector)
+- `supabase/migrations/00002_create_documents_table.sql` — documents table with vector(1536) column
+- `match_documents` Postgres function for similarity search via `supabase.rpc()`
+- Embeddings generated via Bifrost (`openai.embeddings.create`)
+
+### AI Integration
+- Bifrost: `lib/bifrost.ts` — OpenAI SDK with `baseURL` override
+- Flowise: `lib/flowise.ts` — FlowiseClient SDK
+- All AI calls are server-side only and auth-gated
+- Chat streaming via ReadableStream in `app/api/chat/route.ts`
+
+### File Conventions
+- Server Components by default; `'use client'` only when needed
+- Server Actions in `actions.ts` files
+- Route groups: `(auth)` = public auth pages, `(protected)` = auth-required
+- API routes in `app/api/`
+
+## Commands
+- `npm run dev` — start Next.js dev server
+- `npx -y @maximhq/bifrost` — start Bifrost gateway (separate terminal)
+- `npx flowise start` — start Flowise (separate terminal)
