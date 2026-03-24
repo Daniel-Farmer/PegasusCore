@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { SetupWizard } from "@/components/setup-wizard";
 
-const isConfigured = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+const isConfigured =
+  !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("your-project");
 
 /* ── Inline SVG logos ── */
 
