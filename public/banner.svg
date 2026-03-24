@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="50%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3"/>
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" fill="url(#bg)" rx="12"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.04" stroke="#fff" stroke-width="0.5">
+    <line x1="0" y1="50" x2="1200" y2="50"/>
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="150" x2="1200" y2="150"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="250" x2="1200" y2="250"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="350" x2="1200" y2="350"/>
+    <line x1="100" y1="0" x2="100" y2="400"/>
+    <line x1="200" y1="0" x2="200" y2="400"/>
+    <line x1="300" y1="0" x2="300" y2="400"/>
+    <line x1="400" y1="0" x2="400" y2="400"/>
+    <line x1="500" y1="0" x2="500" y2="400"/>
+    <line x1="600" y1="0" x2="600" y2="400"/>
+    <line x1="700" y1="0" x2="700" y2="400"/>
+    <line x1="800" y1="0" x2="800" y2="400"/>
+    <line x1="900" y1="0" x2="900" y2="400"/>
+    <line x1="1000" y1="0" x2="1000" y2="400"/>
+    <line x1="1100" y1="0" x2="1100" y2="400"/>
+  </g>
+
+  <!-- Glow effect -->
+  <ellipse cx="600" cy="160" rx="400" ry="120" fill="url(#glow)"/>
+
+  <!-- Pegasus icon -->
+  <g transform="translate(520, 45) scale(0.9)" fill="url(#accent)">
+    <path d="M80 10 C60 10 40 25 35 45 C30 60 35 75 45 85 L30 110 C28 115 32 120 37 118 L55 110 C65 118 78 120 90 115 C110 108 120 88 115 68 L130 50 C132 47 130 43 127 42 L110 38 C105 22 95 10 80 10Z M70 50 A6 6 0 1 1 70 62 A6 6 0 1 1 70 50Z" opacity="0.9"/>
+    <path d="M45 85 C35 95 20 100 10 95 C5 93 5 88 10 87 C20 85 30 78 35 70" fill="none" stroke="url(#accent)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    <path d="M90 30 C100 20 115 18 125 25" fill="none" stroke="url(#accent)" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+    <path d="M85 25 C92 12 108 8 120 15" fill="none" stroke="url(#accent)" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="200" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#ffffff" letter-spacing="-1">
+    Pegasus Core
+  </text>
+
+  <!-- Accent line -->
+  <rect x="480" y="218" width="240" height="2" rx="1" fill="url(#accent)" opacity="0.6"/>
+
+  <!-- Tagline -->
+  <text x="600" y="252" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" fill="#a1a1aa" letter-spacing="0.5">
+    Ship production-ready AI apps fast
+  </text>
+
+  <!-- Tech stack pills -->
+  <g transform="translate(600, 290)" text-anchor="middle" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', monospace" font-size="12.5">
+    <!-- Next.js -->
+    <g transform="translate(-440, 0)">
+      <rect x="-52" y="-14" width="104" height="28" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+      <text y="4" fill="#e4e4e7">Next.js 15</text>
+    </g>
+    <!-- Supabase -->
+    <g transform="translate(-290, 0)">
+      <rect x="-52" y="-14" width="104" height="28" rx="14" fill="#3ecf8e" fill-opacity="0.08" stroke="#3ecf8e" stroke-opacity="0.2" stroke-width="1"/>
+      <text y="4" fill="#3ecf8e">Supabase</text>
+    </g>
+    <!-- pgvector -->
+    <g transform="translate(-145, 0)">
+      <rect x="-48" y="-14" width="96" height="28" rx="14" fill="#8b5cf6" fill-opacity="0.08" stroke="#8b5cf6" stroke-opacity="0.2" stroke-width="1"/>
+      <text y="4" fill="#a78bfa">pgvector</text>
+    </g>
+    <!-- Bifrost -->
+    <g transform="translate(0, 0)">
+      <rect x="-42" y="-14" width="84" height="28" rx="14" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-opacity="0.2" stroke-width="1"/>
+      <text y="4" fill="#60a5fa">Bifrost</text>
+    </g>
+    <!-- Flowise -->
+    <g transform="translate(140, 0)">
+      <rect x="-46" y="-14" width="92" height="28" rx="14" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-opacity="0.2" stroke-width="1"/>
+      <text y="4" fill="#fbbf24">Flowise</text>
+    </g>
+    <!-- Tailwind -->
+    <g transform="translate(285, 0)">
+      <rect x="-48" y="-14" width="96" height="28" rx="14" fill="#06b6d4" fill-opacity="0.08" stroke="#06b6d4" stroke-opacity="0.2" stroke-width="1"/>
+      <text y="4" fill="#22d3ee">Tailwind</text>
+    </g>
+    <!-- Vercel -->
+    <g transform="translate(430, 0)">
+      <rect x="-42" y="-14" width="84" height="28" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+      <text y="4" fill="#e4e4e7">Vercel</text>
+    </g>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="600" y="355" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#52525b" letter-spacing="0.3">
+    Auth + Database + Storage + Vector Search + AI Chat + Agent Pipelines — all pre-wired
+  </text>
+</svg>

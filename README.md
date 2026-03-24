@@ -1,16 +1,16 @@
-# Pegasus Starter Pack
+<p align="center">
+  <img src="public/banner.svg" alt="Pegasus Core" width="100%" />
+</p>
 
-A production-ready full-stack starter template for **any project**. Fork it, configure it, ship it.
+<p align="center">
+  A pre-wired Next.js 15 starter kit with Supabase auth, Postgres + pgvector, AI chat via Bifrost, and visual agent pipelines via Flowise — skip the boilerplate and ship fast.
+</p>
 
-## Stack
+<p align="center">
+  Ships with CLAUDE.md files so AI coding tools like Claude Code can understand your entire stack — meaning you can vibe code your whole app from day one.
+</p>
 
-| Layer | Tool | What it does |
-|-------|------|-------------|
-| **AI Gateway** | [Bifrost](https://github.com/maximhq/bifrost) | Routes models, caches, optimises — 15+ providers via one OpenAI-compatible API |
-| **AI Agents** | [Flowise](https://github.com/FlowiseAI/Flowise) | Visual AI pipelines — drag-and-drop agents, RAG, multi-step workflows |
-| **Backend** | [Supabase](https://supabase.com) | Database (Postgres), auth, storage, and vector DB (pgvector) |
-| **Frontend** | [Next.js](https://nextjs.org) + [Tailwind](https://tailwindcss.com) | React server components, TypeScript, shadcn/ui |
-| **Hosting** | [Vercel](https://vercel.com) | Zero-config deployment with edge functions |
+---
 
 ## What's Included
 
@@ -21,19 +21,13 @@ A production-ready full-stack starter template for **any project**. Fork it, con
 - **AI chat** — Streaming chat via Bifrost gateway (OpenAI-compatible)
 - **AI agents** — Interact with Flowise chatflows from the app
 
-## Prerequisites
-
-- Node.js 18+
-- A [Supabase](https://database.new) project
-- (Optional) An AI provider API key (OpenAI, Anthropic, etc.) for Bifrost
-
 ## Quick Start
 
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/your-org/pegasus-starter-pack.git
-cd pegasus-starter-pack
+git clone https://github.com/Daniel-Farmer/PegasusCore.git
+cd PegasusCore
 npm install
 ```
 
@@ -59,21 +53,20 @@ In your Supabase dashboard, go to Storage and create a bucket called `files`. En
 ### 5. Start services
 
 ```bash
-# Terminal 1 — Next.js
 npm run dev
-
-# Terminal 2 — Bifrost AI gateway
-npx -y @maximhq/bifrost
-# Open http://localhost:8080 to configure AI providers
-
-# Terminal 3 — Flowise (optional)
-npx flowise start
-# Open http://localhost:3000 to build chatflows
 ```
+
+This starts all three services concurrently:
+
+| Service | URL | Purpose |
+|---------|-----|---------|
+| **Next.js** | `http://localhost:3000` | App frontend + API |
+| **Bifrost** | `http://localhost:8080` | AI gateway (configure providers here) |
+| **Flowise** | `http://localhost:3001` | Visual agent builder |
 
 ### 6. Open the app
 
-Visit [http://localhost:3000](http://localhost:3000) (or port 3001 if Flowise is on 3000).
+Visit [http://localhost:3000](http://localhost:3000) and follow the setup wizard.
 
 ## Project Structure
 
@@ -110,12 +103,11 @@ Visit [http://localhost:3000](http://localhost:3000) (or port 3001 if Flowise is
 
 Bifrost and Flowise need separate hosting (Docker, Railway, etc.) for production.
 
-## Customization
+## Prerequisites
 
-- **Add a new protected page**: Create a folder in `app/(protected)/your-page/page.tsx`
-- **Add a database table**: Create a migration in `supabase/migrations/`, add types to `lib/types/database.ts`
-- **Change AI model**: Update the `model` field in `app/api/chat/route.ts`, or configure in Bifrost UI
-- **Add a new Flowise agent**: Build it in the Flowise UI, grab the chatflow ID, use it in the agents page
+- Node.js 18+
+- A [Supabase](https://database.new) project
+- (Optional) An AI provider API key (OpenAI, Anthropic, etc.) for Bifrost
 
 ## License
 
