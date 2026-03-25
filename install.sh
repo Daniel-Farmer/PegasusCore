@@ -52,8 +52,12 @@ show_banner() {
   echo -e "  ${DIM}Optional modules (Redis, Qdrant, Sentry, etc.) can be${NC}"
   echo -e "  ${DIM}added later from the modules/ directory.${NC}"
   echo ""
-  read -rp "  Press Enter to start, or q to quit: " confirm
-  [[ "$confirm" == "q" || "$confirm" == "Q" ]] && { echo "Aborted."; exit 0; }
+  local confirm=""
+  read -rp "  Press Enter to start, or q to quit: " confirm || true
+  if [[ "$confirm" == "q" || "$confirm" == "Q" ]]; then
+    echo "Aborted."
+    exit 0
+  fi
 }
 
 # ============================================================================
