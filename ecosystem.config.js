@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "next",
-      script: "node_modules/next/dist/bin/next",
+      script: "node_modules/.bin/next",
       args: "start",
       env: {
         PORT: 3000,
@@ -11,18 +11,19 @@ module.exports = {
     },
     {
       name: "bifrost",
-      script: "npx",
-      args: "-y @maximhq/bifrost",
+      script: "bash",
+      args: "-c 'npx -y @maximhq/bifrost'",
       autorestart: true,
+      max_restarts: 5,
+      restart_delay: 5000,
     },
     {
       name: "flowise",
-      script: "npx",
-      args: "flowise start",
-      env: {
-        PORT: 3001,
-      },
+      script: "bash",
+      args: "-c 'PORT=3001 npx flowise start'",
       autorestart: true,
+      max_restarts: 5,
+      restart_delay: 5000,
     },
   ],
 };
