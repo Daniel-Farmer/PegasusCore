@@ -1,0 +1,41 @@
+http:
+  routers:
+    nextjs:
+      rule: "Host(`APP_DOMAIN`)"
+      entryPoints:
+        - websecure
+      service: nextjs
+      tls:
+        certResolver: letsencrypt
+
+    bifrost:
+      rule: "Host(`APP_DOMAIN`) && PathPrefix(`/bifrost`)"
+      entryPoints:
+        - websecure
+      service: bifrost
+      tls:
+        certResolver: letsencrypt
+
+    flowise:
+      rule: "Host(`APP_DOMAIN`) && PathPrefix(`/flowise`)"
+      entryPoints:
+        - websecure
+      service: flowise
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    nextjs:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:3000"
+
+    bifrost:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8080"
+
+    flowise:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:3001"

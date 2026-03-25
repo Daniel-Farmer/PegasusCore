@@ -84,6 +84,13 @@ ehthumbs.db
 .node_repl_history
 .eslintcache
 
+# module runtime data
+modules/traefik/acme/
+lib/bullmq/
+
+# docker
+docker-compose.override.yml
+
 # vercel
 .vercel
 

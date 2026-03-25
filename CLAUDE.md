@@ -47,6 +47,28 @@ Pegasus Starter Pack — a universal full-stack starter template.
 - API routes in `app/api/`
 
 ## Commands
-- `npm run dev` — start Next.js dev server
-- `npx -y @maximhq/bifrost` — start Bifrost gateway (separate terminal)
-- `npx flowise start` — start Flowise (separate terminal)
+- `./install.sh` — interactive installer (Ubuntu VPS)
+- `npm run dev` — start all services in dev mode
+- `npm run build` — build Next.js for production
+- `npm run prod` — start all services with PM2
+- `pm2 status` / `pm2 logs` — check service status
+
+## Optional Modules
+Enabled via `./install.sh` interactive menu. Configs pre-shipped in `modules/`.
+
+| Module | Purpose | Requires |
+|--------|---------|----------|
+| Redis | Caching layer | Docker |
+| Qdrant | Vector DB (alternative to pgvector) | Docker |
+| BullMQ | Job queues for async AI pipelines | Redis |
+| Sentry | Error tracking + performance monitoring | — |
+| Traefik | Reverse proxy + automatic SSL | Docker, domain |
+
+### Module file locations
+- `modules/redis/docker-compose.yml` — Redis container
+- `modules/qdrant/docker-compose.yml` — Qdrant container
+- `modules/bullmq/worker.template.ts` — BullMQ worker example
+- `modules/bullmq/queue.template.ts` — Queue setup helper
+- `modules/sentry/sentry.client.config.ts` — Sentry browser init
+- `modules/sentry/sentry.server.config.ts` — Sentry server init
+- `modules/traefik/` — Traefik reverse proxy + SSL configs
