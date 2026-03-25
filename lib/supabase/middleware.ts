@@ -4,11 +4,14 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
-  // If Supabase is not configured, force setup wizard
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-  ) {
+  // If Supabase is not configured (missing or placeholder), force setup wizard
+  const isConfigured =
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY &&
+    !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("your-project") &&
+    !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.includes("xxxxx");
+
+  if (!isConfigured) {
     const pathname = request.nextUrl.pathname;
     // Allow the root page (setup wizard) and setup API routes
     if (pathname === "/" || pathname.startsWith("/api/setup")) {
