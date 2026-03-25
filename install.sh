@@ -66,12 +66,11 @@ show_banner() {
   echo -e "    ${GREEN}[x]${NC} Docker                 ${DIM}— container runtime${NC}"
   echo -e "    ${GREEN}[x]${NC} Next.js                ${DIM}— app framework${NC}"
   echo -e "    ${GREEN}[x]${NC} Supabase (self-hosted) ${DIM}— auth, DB, storage, vectors${NC}"
-  echo -e "    ${GREEN}[x]${NC} Coolify                ${DIM}— deployment PaaS${NC}"
   echo -e "    ${GREEN}[x]${NC} Bifrost                ${DIM}— AI gateway${NC}"
   echo -e "    ${GREEN}[x]${NC} Flowise                ${DIM}— visual agent builder${NC}"
   echo ""
-  echo -e "  ${DIM}Optional modules (Redis, Qdrant, Sentry, etc.) can be${NC}"
-  echo -e "  ${DIM}added later from the modules/ directory.${NC}"
+  echo -e "  ${DIM}Optional modules (Redis, Qdrant, Coolify, Sentry, etc.)${NC}"
+  echo -e "  ${DIM}can be added later from the modules/ directory.${NC}"
   echo ""
   local confirm=""
   read -rp "  Press Enter to start, or q to quit: " confirm || true
@@ -288,8 +287,6 @@ setup_firewall() {
   ufw allow 3100 >/dev/null 2>&1    # Supabase Studio
   ufw allow 8000 >/dev/null 2>&1    # Supabase API
   ufw allow 8081 >/dev/null 2>&1    # Bifrost (proxied)
-  ufw allow 8880 >/dev/null 2>&1    # Coolify
-
   ok
 }
 
@@ -309,7 +306,6 @@ show_summary() {
   echo -e "    Next.js      ${CYAN}http://$ip:3000${NC}"
   echo -e "    Supabase     ${CYAN}http://$ip:3100${NC}  ${DIM}(Studio)${NC}"
   echo -e "    Supabase API ${CYAN}http://$ip:8000${NC}"
-  echo -e "    Coolify      ${CYAN}http://$ip:8880${NC}"
   echo -e "    Bifrost      ${CYAN}http://$ip:8081${NC}"
   echo -e "    Flowise      ${CYAN}http://$ip:3001${NC}"
   echo ""
@@ -339,25 +335,22 @@ main() {
 
   show_banner
 
-  echo -e "\n${BOLD}  [1/7] System dependencies${NC}"
+  echo -e "\n${BOLD}  [1/6] System dependencies${NC}"
   install_system_deps
 
-  echo -e "\n${BOLD}  [2/7] Next.js app${NC}"
+  echo -e "\n${BOLD}  [2/6] Next.js app${NC}"
   install_app
 
-  echo -e "\n${BOLD}  [3/7] Supabase (self-hosted)${NC}"
+  echo -e "\n${BOLD}  [3/6] Supabase (self-hosted)${NC}"
   install_supabase
 
-  echo -e "\n${BOLD}  [4/7] Coolify${NC}"
-  install_coolify
-
-  echo -e "\n${BOLD}  [5/7] PM2 ecosystem${NC}"
+  echo -e "\n${BOLD}  [4/6] PM2 ecosystem${NC}"
   generate_ecosystem
 
-  echo -e "\n${BOLD}  [6/7] Build & start${NC}"
+  echo -e "\n${BOLD}  [5/6] Build & start${NC}"
   build_and_start
 
-  echo -e "\n${BOLD}  [7/7] Firewall${NC}"
+  echo -e "\n${BOLD}  [6/6] Firewall${NC}"
   setup_firewall
 
   show_summary
