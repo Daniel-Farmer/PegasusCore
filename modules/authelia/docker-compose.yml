@@ -1,0 +1,17 @@
+services:
+  authelia:
+    image: authelia/authelia:latest
+    container_name: pegasus-authelia
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9091:9091"
+    volumes:
+      - ./configuration.yml:/config/configuration.yml:ro
+      - authelia_data:/data
+    environment:
+      AUTHELIA_JWT_SECRET: pegasus-authelia-jwt-secret-change-me
+      AUTHELIA_SESSION_SECRET: pegasus-authelia-session-secret-change-me
+      AUTHELIA_STORAGE_ENCRYPTION_KEY: pegasus-authelia-encryption-key-change-me
+
+volumes:
+  authelia_data:

@@ -1,0 +1,20 @@
+services:
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: pegasus-meilisearch
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7700:7700"
+    volumes:
+      - meilisearch_data:/meili_data
+    environment:
+      MEILI_ENV: development
+      MEILI_MASTER_KEY: pegasus-meili-key
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  meilisearch_data:

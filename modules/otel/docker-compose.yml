@@ -1,0 +1,21 @@
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: pegasus-otel
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4317:4317"
+      - "127.0.0.1:4318:4318"
+      - "127.0.0.1:55679:55679"
+    volumes:
+      - ./otel-config.yml:/etc/otelcol-contrib/config.yaml:ro
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: pegasus-jaeger
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:16686:16686"
+      - "127.0.0.1:14268:14268"
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
