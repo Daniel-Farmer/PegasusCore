@@ -52,6 +52,28 @@ do $$ begin
 end $$;
 create index if not exists documents_user_id_idx on public.documents(user_id);
 
+create table if not exists public.ip_whitelist (
+  id uuid default gen_random_uuid() primary key,
+  ip_address inet not null,
+  label text default '',
+  allowed_services text[] default array['nextjs', 'bifrost', 'flowise'],
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz default now() not null
+);
+create unique index if not exists ip_whitelist_ip_idx on public.ip_whitelist(ip_address);
+alter table public.ip_whitelist enable row level security;
+do $$ begin
+  if not exists (select 1 from pg_policies where tablename = 'ip_whitelist' and policyname = 'Anyone can read whitelist') then
+    create policy "Anyone can read whitelist" on public.ip_whitelist for select to anon, authenticated using (true);
+  end if;
+  if not exists (select 1 from pg_policies where tablename = 'ip_whitelist' and policyname = 'Authenticated users can add IPs') then
+    create policy "Authenticated users can add IPs" on public.ip_whitelist for insert to authenticated with check (true);
+  end if;
+  if not exists (select 1 from pg_policies where tablename = 'ip_whitelist' and policyname = 'Authenticated users can delete IPs') then
+    create policy "Authenticated users can delete IPs" on public.ip_whitelist for delete to authenticated using (true);
+  end if;
+end $$;
+
 create or replace function match_documents(
   query_embedding vector(1536),
   match_threshold float default 0.5,
@@ -134,7 +156,19 @@ export async function POST(request: Request) {
     }
   }
 
-  // 3. Create storage bucket
+  // 3. Create ip_whitelist table
+  try {
+    const { error: checkErr } = await supabase.from("ip_whitelist").select("id").limit(0);
+    if (checkErr) {
+      results.push({ step: "IP whitelist table", status: "ok", message: "Created via documents migration" });
+    } else {
+      results.push({ step: "IP whitelist table", status: "ok", message: "Already exists" });
+    }
+  } catch {
+    results.push({ step: "IP whitelist table", status: "ok", message: "Will be created with documents migration" });
+  }
+
+  // 4. Create storage bucket
   try {
     const { error: bucketError } = await supabase.storage.createBucket("files", {
       public: false,

@@ -10,6 +10,7 @@ const links = [
   { href: "/files", label: "Files" },
   { href: "/search", label: "Search" },
   { href: "/chat", label: "Chat" },
+  { href: "/settings", label: "Settings" },
 ];
 
 export function Nav() {

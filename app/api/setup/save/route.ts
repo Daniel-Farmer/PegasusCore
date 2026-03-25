@@ -1,6 +1,8 @@
+import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import { writeFileSync } from "fs";
 import { join } from "path";
+import { getClientIp } from "@/lib/ip";
 
 export async function POST(request: Request) {
   if (process.env.NODE_ENV === "production") {
@@ -31,7 +33,32 @@ export async function POST(request: Request) {
   try {
     const envPath = join(process.cwd(), ".env.local");
     writeFileSync(envPath, lines.join("\n"), "utf-8");
-    return NextResponse.json({ ok: true, path: envPath });
+
+    // Auto-whitelist the installer's IP
+    let whitelistedIp: string | null = null;
+    if (config.supabaseUrl && config.serviceRoleKey) {
+      const ip = getClientIp(request);
+      if (ip) {
+        try {
+          const supabase = createClient(config.supabaseUrl, config.serviceRoleKey, {
+            auth: { autoRefreshToken: false, persistSession: false },
+          });
+          await supabase.from("ip_whitelist").upsert(
+            {
+              ip_address: ip,
+              label: "Setup installer",
+              allowed_services: ["nextjs", "bifrost", "flowise"],
+            },
+            { onConflict: "ip_address" }
+          );
+          whitelistedIp = ip;
+        } catch {
+          // Non-critical — IP whitelist table might not exist yet
+        }
+      }
+    }
+
+    return NextResponse.json({ ok: true, path: envPath, whitelistedIp });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to write .env.local";
     return NextResponse.json({ error: message }, { status: 500 });

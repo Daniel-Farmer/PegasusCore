@@ -233,6 +233,8 @@ export function SetupWizard() {
     }
   }
 
+  const [whitelistedIp, setWhitelistedIp] = useState("");
+
   async function saveConfig() {
     setLoading(true);
     setError("");
@@ -243,6 +245,7 @@ export function SetupWizard() {
         body: JSON.stringify({
           supabaseUrl,
           supabaseKey,
+          serviceRoleKey,
           bifrostUrl,
           bifrostKey,
           flowiseUrl,
@@ -253,6 +256,9 @@ export function SetupWizard() {
       const data = await res.json();
       if (data.ok) {
         setSaved(true);
+        if (data.whitelistedIp) {
+          setWhitelistedIp(data.whitelistedIp);
+        }
       } else {
         setError(data.error || "Failed to save");
       }
@@ -806,7 +812,17 @@ export function SetupWizard() {
                   Your <code className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-xs">.env.local</code> has been created.
                   Restart your dev server to apply.
                 </p>
-                <Card className="mt-8 border-white/[0.06] bg-white/[0.02]">
+                {whitelistedIp && (
+                  <div className="mt-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-4 py-2.5 text-sm">
+                    <svg className="h-4 w-4 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                    </svg>
+                    <span className="text-emerald-300/80">
+                      Your IP <code className="rounded bg-white/[0.06] px-1 py-0.5 font-mono text-xs text-emerald-300">{whitelistedIp}</code> has been whitelisted
+                    </span>
+                  </div>
+                )}
+                <Card className="mt-6 border-white/[0.06] bg-white/[0.02]">
                   <CardContent className="pt-6">
                     <p className="text-sm text-white/30">Run this in your terminal:</p>
                     <code className="mt-2 block rounded bg-black/40 px-4 py-2 font-mono text-sm text-white/60">
