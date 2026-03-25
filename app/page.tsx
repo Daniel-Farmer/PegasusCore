@@ -1,101 +1,40 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SetupWizard } from "@/components/setup-wizard";
 
 const isConfigured =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("your-project");
 
-/* ── Inline SVG logos ── */
-
-function BifrostLogo({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="#6366f1" />
-      <path
-        d="M12 28V12h4.5c2.5 0 4.2 1.2 4.2 3.3 0 1.6-1 2.7-2.4 3.1 1.7.3 2.9 1.7 2.9 3.5 0 2.4-1.8 3.8-4.5 3.8H12Zm3 5.3h1.8c1.2 0 1.9-.6 1.9-1.6s-.7-1.6-1.9-1.6H15v3.2Zm0 5.4h2c1.3 0 2.1-.7 2.1-1.8 0-1-.8-1.7-2.1-1.7h-2v3.5Z"
-        fill="white"
-      />
-      <path d="M24 14l4 6-4 6M28 20H20" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function FlowiseLogo({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="#2563eb" />
-      <circle cx="14" cy="14" r="3" stroke="white" strokeWidth="2" />
-      <circle cx="26" cy="14" r="3" stroke="white" strokeWidth="2" />
-      <circle cx="20" cy="26" r="3" stroke="white" strokeWidth="2" />
-      <path d="M16.5 16l2.5 8M23.5 16l-2.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function SupabaseLogo({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="#3ECF8E" />
-      <path
-        d="M22.3 29.2c-.4.5-1.3.2-1.3-.5V21h8.2c.9 0 1.4 1 .8 1.7l-7.7 6.5Z"
-        fill="white"
-        fillOpacity=".8"
-      />
-      <path
-        d="M17.7 10.8c.4-.5 1.3-.2 1.3.5V19H10.8c-.9 0-1.4-1-.8-1.7l7.7-6.5Z"
-        fill="white"
-      />
-    </svg>
-  );
-}
-
-function NextjsLogo({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="white" />
-      <circle cx="20" cy="20" r="10" fill="black" />
-      <path d="M16 14v12l10-12" fill="white" />
-      <circle cx="25" cy="15" r="1.5" fill="white" />
-    </svg>
-  );
-}
-
-function VercelLogo({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="white" />
-      <path d="M20 12L30 28H10L20 12Z" fill="black" />
-    </svg>
-  );
-}
-
 /* ── Data ── */
 
 const stack = [
   {
-    Logo: BifrostLogo,
+    logo: "/logos/bifrost.png",
     title: "Bifrost",
     description: "AI gateway — routes to 15+ providers, caches, failover",
   },
   {
-    Logo: FlowiseLogo,
+    logo: "/logos/flowise.png",
     title: "Flowise",
     description: "Visual builder for AI agents, RAG, and workflows",
   },
   {
-    Logo: SupabaseLogo,
+    logo: "/logos/supabase.png",
     title: "Supabase",
     description: "Postgres, auth, storage, and vector DB (pgvector)",
   },
   {
-    Logo: NextjsLogo,
+    logo: "/logos/nextjs.svg",
     title: "Next.js",
     description: "React server components, TypeScript, and Tailwind",
+    invert: true,
   },
   {
-    Logo: VercelLogo,
+    logo: "/logos/vercel.png",
     title: "Vercel",
     description: "Zero-config deploy, edge functions, global CDN",
+    invert: true,
   },
 ];
 
@@ -210,7 +149,13 @@ export default function HomePage() {
                   key={item.title}
                   className="group flex flex-col items-center rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-8 text-center transition-colors hover:border-white/10 hover:bg-white/[0.04]"
                 >
-                  <item.Logo className="mb-4 h-12 w-12" />
+                  <Image
+                    src={item.logo}
+                    alt={item.title}
+                    width={48}
+                    height={48}
+                    className={`mb-4 h-12 w-12 rounded-lg object-contain${"invert" in item && item.invert ? " invert" : ""}`}
+                  />
                   <h3 className="text-sm font-semibold">{item.title}</h3>
                   <p className="mt-2 text-xs leading-relaxed text-white/40">
                     {item.description}
