@@ -25,6 +25,27 @@ ok()   { echo -e "   ${GREEN}done${NC}"; }
 warn() { echo -e "   ${YELLOW}$1${NC}"; }
 fail() { echo -e "   ${RED}$1${NC}"; exit 1; }
 
+# Wait for a URL to respond (up to N seconds)
+wait_for() {
+  local url=$1
+  local name=$2
+  local max_wait=${3:-60}
+  local elapsed=0
+
+  echo -ne "   Waiting for ${name}..."
+  while [[ $elapsed -lt $max_wait ]]; do
+    if curl -sf "$url" >/dev/null 2>&1; then
+      echo -e " ${GREEN}ready${NC}"
+      return 0
+    fi
+    sleep 3
+    elapsed=$((elapsed + 3))
+    echo -ne "."
+  done
+  echo -e " ${YELLOW}timeout (may still be starting)${NC}"
+  return 1
+}
+
 # ============================================================================
 # Banner
 # ============================================================================
@@ -155,32 +176,15 @@ install_supabase() {
     cd "$SCRIPT_DIR"
   fi
 
-  # Get the local Supabase URL and keys
-  local sb_url="http://localhost:8000"
-
-  # Wait for Supabase to be ready
-  step "Waiting for Supabase to start"
-  local retries=30
-  while [[ $retries -gt 0 ]]; do
-    if curl -sf "$sb_url/rest/v1/" -H "apikey: placeholder" >/dev/null 2>&1 || \
-       curl -sf "$sb_url" >/dev/null 2>&1; then
-      break
-    fi
-    sleep 2
-    retries=$((retries - 1))
-  done
-
-  if [[ $retries -eq 0 ]]; then
-    warn "Supabase may still be starting — check 'docker compose -f /opt/supabase/docker/docker-compose.yml logs'"
-  else
-    ok
-  fi
+  # Wait for Supabase API to be ready before moving on
+  wait_for "http://localhost:8000" "Supabase API" 90 || true
 
   # Update .env.local with local Supabase URL
   local ip
   ip=$(hostname -I | awk '{print $1}')
   sed -i "s|NEXT_PUBLIC_SUPABASE_URL=.*|NEXT_PUBLIC_SUPABASE_URL=http://$ip:8000|" .env.local
   step "Supabase URL set to http://$ip:8000"
+  ok
 }
 
 # ============================================================================
@@ -188,10 +192,16 @@ install_supabase() {
 # ============================================================================
 install_coolify() {
   step "Installing Coolify"
-  if curl -sf http://localhost:8000 >/dev/null 2>&1 && command -v coolify &>/dev/null; then
-    warn "Coolify already installed"
+  if docker ps 2>/dev/null | grep -q coolify; then
+    warn "Coolify already running"
   else
+    # Coolify defaults to port 8000 which conflicts with Supabase Kong
+    # Set Coolify to use port 8080 instead — but Bifrost also uses 8080 internally
+    # Use port 8880 for Coolify
+    export COOLIFY_PORT=8880
     curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
+    # Wait for Coolify to be ready
+    wait_for "http://localhost:8880" "Coolify" 120 || true
   fi
   ok
 }
@@ -276,8 +286,9 @@ setup_firewall() {
   ufw allow 3000 >/dev/null 2>&1    # Next.js
   ufw allow 3001 >/dev/null 2>&1    # Flowise
   ufw allow 3100 >/dev/null 2>&1    # Supabase Studio
-  ufw allow 8000 >/dev/null 2>&1    # Supabase API / Coolify
+  ufw allow 8000 >/dev/null 2>&1    # Supabase API
   ufw allow 8081 >/dev/null 2>&1    # Bifrost (proxied)
+  ufw allow 8880 >/dev/null 2>&1    # Coolify
 
   ok
 }
@@ -298,7 +309,7 @@ show_summary() {
   echo -e "    Next.js      ${CYAN}http://$ip:3000${NC}"
   echo -e "    Supabase     ${CYAN}http://$ip:3100${NC}  ${DIM}(Studio)${NC}"
   echo -e "    Supabase API ${CYAN}http://$ip:8000${NC}"
-  echo -e "    Coolify      ${CYAN}http://$ip:8000${NC}"
+  echo -e "    Coolify      ${CYAN}http://$ip:8880${NC}"
   echo -e "    Bifrost      ${CYAN}http://$ip:8081${NC}"
   echo -e "    Flowise      ${CYAN}http://$ip:3001${NC}"
   echo ""
@@ -327,13 +338,28 @@ main() {
   fi
 
   show_banner
+
+  echo -e "\n${BOLD}  [1/7] System dependencies${NC}"
   install_system_deps
+
+  echo -e "\n${BOLD}  [2/7] Next.js app${NC}"
   install_app
+
+  echo -e "\n${BOLD}  [3/7] Supabase (self-hosted)${NC}"
   install_supabase
+
+  echo -e "\n${BOLD}  [4/7] Coolify${NC}"
   install_coolify
+
+  echo -e "\n${BOLD}  [5/7] PM2 ecosystem${NC}"
   generate_ecosystem
+
+  echo -e "\n${BOLD}  [6/7] Build & start${NC}"
   build_and_start
+
+  echo -e "\n${BOLD}  [7/7] Firewall${NC}"
   setup_firewall
+
   show_summary
 }
 
