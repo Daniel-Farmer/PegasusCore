@@ -5,11 +5,11 @@ Pegasus Starter Pack — a universal full-stack starter template.
 
 ## Tech Stack
 - Next.js 15 (App Router, Server Components, TypeScript strict)
-- Supabase (`@supabase/ssr` + `@supabase/supabase-js`) — auth, DB, storage, pgvector
+- Supabase self-hosted (`@supabase/ssr` + `@supabase/supabase-js`) — auth, DB, storage, pgvector
 - Bifrost (github.com/maximhq/bifrost) — AI gateway, OpenAI-compatible API
 - Flowise (`flowise-sdk`) — visual AI agent builder
+- Coolify — self-hosted PaaS (deployment, management)
 - Tailwind CSS + shadcn/ui
-- Vercel — deployment target
 
 ## Key Patterns
 

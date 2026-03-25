@@ -25,9 +25,6 @@ export async function POST(request: Request) {
     `FLOWISE_CHATFLOW_ID=${config.flowiseChatflowId || ""}`,
     `FLOWISE_API_KEY=${config.flowiseKey || ""}`,
     "",
-    "# Vercel (auto-set on deploy)",
-    "# VERCEL_URL",
-    "",
   ];
 
   try {

@@ -375,16 +375,17 @@ export function SetupWizard() {
             </div>
 
             <p className="mt-6 text-sm text-white/50">
-              Find these in your{" "}
+              If you used the install script, Supabase is running locally.
+              Find your API keys in the{" "}
               <a
-                href="https://supabase.com/dashboard/project/_/settings/api"
+                href="/supabase"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-violet-400 underline underline-offset-2"
               >
-                Supabase dashboard
+                Supabase Studio
               </a>{" "}
-              under Settings &rarr; API.
+              under Settings &rarr; API, or in <code className="text-violet-300">/opt/supabase/docker/.env</code>.
             </p>
 
             <div className="mt-6 space-y-4">
@@ -392,7 +393,7 @@ export function SetupWizard() {
                 <Label htmlFor="supabase-url" className="text-sm text-white/60">Project URL</Label>
                 <Input
                   id="supabase-url"
-                  placeholder="https://your-project.supabase.co"
+                  placeholder="http://your-server-ip:8000"
                   value={supabaseUrl}
                   onChange={(e) => { setSupabaseUrl(e.target.value); setSupabaseValid(false); }}
                   className="mt-1.5 border-white/10 bg-white/[0.04]"

@@ -23,7 +23,7 @@ const stack = [
   {
     logo: "/logos/supabase.png",
     title: "Supabase",
-    description: "Postgres, auth, storage, and vector DB (pgvector)",
+    description: "Self-hosted Postgres, auth, storage, and vector DB",
   },
   {
     logo: "/logos/nextjs.svg",
@@ -32,10 +32,9 @@ const stack = [
     invert: true,
   },
   {
-    logo: "/logos/vercel.png",
-    title: "Vercel",
-    description: "Zero-config deploy, edge functions, global CDN",
-    invert: true,
+    logo: "/logos/coolify.svg",
+    title: "Coolify",
+    description: "Self-hosted PaaS — deploy, manage, and scale",
   },
 ];
 
