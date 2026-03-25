@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 
 const FLOWISE_URL = "http://127.0.0.1:3001";
 
-async function proxyRequest(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
+async function proxyRequest(request: NextRequest, { params }: { params: Promise<{ path?: string[] }> }) {
   // Auth check
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -12,8 +12,8 @@ async function proxyRequest(request: NextRequest, { params }: { params: Promise<
   }
 
   const { path } = await params;
-  const targetPath = path.join("/");
-  const url = new URL(targetPath, FLOWISE_URL);
+  const targetPath = path?.join("/") ?? "";
+  const url = new URL(targetPath, FLOWISE_URL + "/");
   url.search = request.nextUrl.search;
 
   const headers = new Headers();
@@ -30,6 +30,17 @@ async function proxyRequest(request: NextRequest, { params }: { params: Promise<
     // @ts-expect-error duplex is needed for streaming request bodies
     duplex: "half",
   });
+
+  // Rewrite asset URLs in HTML so they load through the proxy
+  const contentType = res.headers.get("content-type") || "";
+  if (contentType.includes("text/html")) {
+    let html = await res.text();
+    html = html.replace(/(href|src|action)="\//g, '$1="/api/proxy/flowise/');
+    return new NextResponse(html, {
+      status: res.status,
+      headers: { "Content-Type": "text/html" },
+    });
+  }
 
   return new NextResponse(res.body, {
     status: res.status,
