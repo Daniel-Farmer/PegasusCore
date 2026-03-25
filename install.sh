@@ -60,12 +60,72 @@ needs_docker() {
 }
 
 # ============================================================================
-# Interactive menu
+# Interactive menu with arrow key navigation
 # ============================================================================
-mark() { [[ $1 -eq 1 ]] && echo "x" || echo " "; }
 
-show_menu() {
-  clear
+# Module definitions: name|description|variable_name
+# Sections are marked with empty name
+MODULES=(
+  "|Infrastructure|"
+  "Coolify|self-hosted PaaS|COOLIFY"
+  "Traefik|reverse proxy + auto SSL|TRAEFIK"
+  "Supabase (self)|self-hosted Postgres + auth + storage|SUPABASE_SELF"
+  "|Data & Storage|"
+  "Redis|caching, queues, rate limiting|REDIS"
+  "MinIO|S3-compatible object storage|MINIO"
+  "Meilisearch|full-text search engine|MEILISEARCH"
+  "|AI Layer|"
+  "Qdrant|vector DB for embeddings|QDRANT"
+  "Weaviate|vector DB (alternative)|WEAVIATE"
+  "Temporal|durable workflow engine|TEMPORAL"
+  "BullMQ|job queues (auto-enables Redis)|BULLMQ"
+  "GPU Nodes|RunPod / Vast / self-hosted|GPU"
+  "|Security|"
+  "Authelia|SSO + identity provider|AUTHELIA"
+  "Vault|secrets management|VAULT"
+  "|Monitoring & DevEx|"
+  "OpenTelemetry|tracing + metrics|OTEL"
+  "Sentry|error tracking|SENTRY"
+  "NATS|event messaging|NATS"
+  "GitHub Actions|CI/CD workflows|GITHUB_ACTIONS"
+  "Drizzle|TypeScript ORM|DRIZZLE"
+  "Prisma|database ORM|PRISMA"
+  "Claude Code|AI coding assistant on the server|CLAUDE_CODE"
+)
+
+# Build list of selectable indices (skip section headers)
+SELECTABLE=()
+for i in "${!MODULES[@]}"; do
+  IFS='|' read -r name _ _ <<< "${MODULES[$i]}"
+  [[ -n "$name" ]] && SELECTABLE+=("$i")
+done
+
+CURSOR=0  # index into SELECTABLE array
+
+get_mod() {
+  local varname="MOD_$1"
+  echo "${!varname}"
+}
+
+set_mod() {
+  local varname="MOD_$1"
+  eval "$varname=$2"
+}
+
+toggle_mod() {
+  local varname="MOD_$1"
+  local current="${!varname}"
+  eval "$varname=$(( 1 - current ))"
+  # BullMQ auto-enables Redis
+  if [[ "$1" == "BULLMQ" && $(get_mod BULLMQ) -eq 1 ]]; then
+    set_mod REDIS 1
+  fi
+}
+
+draw_menu() {
+  # Move cursor to top and clear
+  echo -ne "\033[H\033[J"
+
   echo -e "${CYAN}${BOLD}"
   echo "  ____                                    ____"
   echo " |  _ \ ___  __ _  __ _ ___ _   _ ___   / ___|___  _ __ ___"
@@ -81,90 +141,106 @@ show_menu() {
   echo -e "    ${GREEN}[x]${NC} Next.js app            ${GREEN}[x]${NC} Flowise (agent builder)"
   echo -e "    ${GREEN}[x]${NC} Supabase (cloud)"
   echo ""
-  echo -e "  ${YELLOW}Optional modules — enter number to toggle:${NC}"
+  echo -e "  ${YELLOW}Use arrows to navigate, space to toggle, Enter to install:${NC}"
   echo ""
-  echo -e "  ${MAGENTA}Infrastructure${NC}"
-  echo -e "     ${BOLD}1)${NC} [$(mark $MOD_COOLIFY)] Coolify          ${DIM}— self-hosted PaaS${NC}"
-  echo -e "     ${BOLD}2)${NC} [$(mark $MOD_TRAEFIK)] Traefik          ${DIM}— reverse proxy + auto SSL${NC}"
-  echo -e "     ${BOLD}3)${NC} [$(mark $MOD_SUPABASE_SELF)] Supabase (self)  ${DIM}— self-hosted Postgres + auth + storage${NC}"
+
+  local sel_idx=0
+  for i in "${!MODULES[@]}"; do
+    IFS='|' read -r name desc varname <<< "${MODULES[$i]}"
+
+    if [[ -z "$name" ]]; then
+      # Section header
+      echo -e "  ${MAGENTA}${desc}${NC}"
+      continue
+    fi
+
+    # Check if this is the cursor position
+    local is_cursor=0
+    if [[ ${SELECTABLE[$CURSOR]} -eq $i ]]; then
+      is_cursor=1
+    fi
+
+    local val=$(get_mod "$varname")
+    local check=" "
+    [[ $val -eq 1 ]] && check="x"
+
+    if [[ $is_cursor -eq 1 ]]; then
+      echo -e "  ${CYAN}${BOLD}> [${check}] ${name}${NC}  ${DIM}— ${desc}${NC}"
+    else
+      echo -e "    [${check}] ${name}  ${DIM}— ${desc}${NC}"
+    fi
+  done
+
   echo ""
-  echo -e "  ${MAGENTA}Data & Storage${NC}"
-  echo -e "     ${BOLD}4)${NC} [$(mark $MOD_REDIS)] Redis            ${DIM}— caching, queues, rate limiting${NC}"
-  echo -e "     ${BOLD}5)${NC} [$(mark $MOD_MINIO)] MinIO            ${DIM}— S3-compatible object storage${NC}"
-  echo -e "     ${BOLD}6)${NC} [$(mark $MOD_MEILISEARCH)] Meilisearch      ${DIM}— full-text search engine${NC}"
-  echo ""
-  echo -e "  ${MAGENTA}AI Layer${NC}"
-  echo -e "     ${BOLD}7)${NC} [$(mark $MOD_QDRANT)] Qdrant           ${DIM}— vector DB for embeddings${NC}"
-  echo -e "     ${BOLD}8)${NC} [$(mark $MOD_WEAVIATE)] Weaviate         ${DIM}— vector DB (alternative)${NC}"
-  echo -e "     ${BOLD}9)${NC} [$(mark $MOD_TEMPORAL)] Temporal         ${DIM}— durable workflow engine${NC}"
-  echo -e "    ${BOLD}10)${NC} [$(mark $MOD_BULLMQ)] BullMQ           ${DIM}— job queues (auto-enables Redis)${NC}"
-  echo -e "    ${BOLD}11)${NC} [$(mark $MOD_GPU)] GPU Nodes        ${DIM}— RunPod / Vast / self-hosted${NC}"
-  echo ""
-  echo -e "  ${MAGENTA}Security${NC}"
-  echo -e "    ${BOLD}12)${NC} [$(mark $MOD_AUTHELIA)] Authelia         ${DIM}— SSO + identity provider${NC}"
-  echo -e "    ${BOLD}13)${NC} [$(mark $MOD_VAULT)] Vault            ${DIM}— secrets management${NC}"
-  echo ""
-  echo -e "  ${MAGENTA}Monitoring & DevEx${NC}"
-  echo -e "    ${BOLD}14)${NC} [$(mark $MOD_OTEL)] OpenTelemetry    ${DIM}— tracing + metrics${NC}"
-  echo -e "    ${BOLD}15)${NC} [$(mark $MOD_SENTRY)] Sentry           ${DIM}— error tracking${NC}"
-  echo -e "    ${BOLD}16)${NC} [$(mark $MOD_NATS)] NATS             ${DIM}— event messaging${NC}"
-  echo -e "    ${BOLD}17)${NC} [$(mark $MOD_GITHUB_ACTIONS)] GitHub Actions   ${DIM}— CI/CD workflows${NC}"
-  echo -e "    ${BOLD}18)${NC} [$(mark $MOD_DRIZZLE)] Drizzle          ${DIM}— TypeScript ORM${NC}"
-  echo -e "    ${BOLD}19)${NC} [$(mark $MOD_PRISMA)] Prisma           ${DIM}— database ORM${NC}"
-  echo -e "    ${BOLD}20)${NC} [$(mark $MOD_CLAUDE_CODE)] Claude Code      ${DIM}— AI coding assistant on the server${NC}"
-  echo ""
-  echo -e "    ${BOLD} a)${NC} Select all    ${BOLD}n)${NC} Select none"
-  echo ""
-  echo -e "  Press ${BOLD}Enter${NC} to install, ${BOLD}q${NC} to quit."
+  echo -e "  ${DIM}[a] select all  [n] select none  [q] quit${NC}"
   echo ""
 }
 
-select_modules() {
-  while true; do
-    show_menu
-    read -rp "  > " key
+read_key() {
+  local key
+  IFS= read -rsn1 key
+  if [[ "$key" == $'\x1b' ]]; then
+    read -rsn2 -t 0.1 key
     case "$key" in
-      1)  MOD_COOLIFY=$(( 1 - MOD_COOLIFY )) ;;
-      2)  MOD_TRAEFIK=$(( 1 - MOD_TRAEFIK )) ;;
-      3)  MOD_SUPABASE_SELF=$(( 1 - MOD_SUPABASE_SELF )) ;;
-      4)  MOD_REDIS=$(( 1 - MOD_REDIS )) ;;
-      5)  MOD_MINIO=$(( 1 - MOD_MINIO )) ;;
-      6)  MOD_MEILISEARCH=$(( 1 - MOD_MEILISEARCH )) ;;
-      7)  MOD_QDRANT=$(( 1 - MOD_QDRANT )) ;;
-      8)  MOD_WEAVIATE=$(( 1 - MOD_WEAVIATE )) ;;
-      9)  MOD_TEMPORAL=$(( 1 - MOD_TEMPORAL )) ;;
-      10)
-        MOD_BULLMQ=$(( 1 - MOD_BULLMQ ))
-        [[ $MOD_BULLMQ -eq 1 ]] && MOD_REDIS=1
+      '[A') echo "UP" ;;
+      '[B') echo "DOWN" ;;
+      *) echo "ESC" ;;
+    esac
+  elif [[ "$key" == "" ]]; then
+    echo "ENTER"
+  elif [[ "$key" == " " ]]; then
+    echo "SPACE"
+  else
+    echo "$key"
+  fi
+}
+
+select_modules() {
+  # Hide cursor
+  echo -ne "\033[?25l"
+  # Restore cursor on exit
+  trap 'echo -ne "\033[?25h"' EXIT
+
+  while true; do
+    draw_menu
+    local key
+    key=$(read_key)
+
+    case "$key" in
+      UP)
+        CURSOR=$(( CURSOR - 1 ))
+        [[ $CURSOR -lt 0 ]] && CURSOR=$(( ${#SELECTABLE[@]} - 1 ))
         ;;
-      11) MOD_GPU=$(( 1 - MOD_GPU )) ;;
-      12) MOD_AUTHELIA=$(( 1 - MOD_AUTHELIA )) ;;
-      13) MOD_VAULT=$(( 1 - MOD_VAULT )) ;;
-      14) MOD_OTEL=$(( 1 - MOD_OTEL )) ;;
-      15) MOD_SENTRY=$(( 1 - MOD_SENTRY )) ;;
-      16) MOD_NATS=$(( 1 - MOD_NATS )) ;;
-      17) MOD_GITHUB_ACTIONS=$(( 1 - MOD_GITHUB_ACTIONS )) ;;
-      18) MOD_DRIZZLE=$(( 1 - MOD_DRIZZLE )) ;;
-      19) MOD_PRISMA=$(( 1 - MOD_PRISMA )) ;;
-      20) MOD_CLAUDE_CODE=$(( 1 - MOD_CLAUDE_CODE )) ;;
+      DOWN)
+        CURSOR=$(( CURSOR + 1 ))
+        [[ $CURSOR -ge ${#SELECTABLE[@]} ]] && CURSOR=0
+        ;;
+      SPACE)
+        local idx=${SELECTABLE[$CURSOR]}
+        IFS='|' read -r _ _ varname <<< "${MODULES[$idx]}"
+        toggle_mod "$varname"
+        ;;
       a|A)
-        MOD_COOLIFY=1; MOD_TRAEFIK=1; MOD_SUPABASE_SELF=1
-        MOD_REDIS=1; MOD_MINIO=1; MOD_MEILISEARCH=1
-        MOD_QDRANT=1; MOD_WEAVIATE=1; MOD_TEMPORAL=1; MOD_BULLMQ=1; MOD_GPU=1
-        MOD_AUTHELIA=1; MOD_VAULT=1
-        MOD_OTEL=1; MOD_SENTRY=1; MOD_NATS=1; MOD_GITHUB_ACTIONS=1
-        MOD_DRIZZLE=1; MOD_PRISMA=1; MOD_CLAUDE_CODE=1
+        for idx in "${SELECTABLE[@]}"; do
+          IFS='|' read -r _ _ varname <<< "${MODULES[$idx]}"
+          set_mod "$varname" 1
+        done
         ;;
       n|N)
-        MOD_COOLIFY=0; MOD_TRAEFIK=0; MOD_SUPABASE_SELF=0
-        MOD_REDIS=0; MOD_MINIO=0; MOD_MEILISEARCH=0
-        MOD_QDRANT=0; MOD_WEAVIATE=0; MOD_TEMPORAL=0; MOD_BULLMQ=0; MOD_GPU=0
-        MOD_AUTHELIA=0; MOD_VAULT=0
-        MOD_OTEL=0; MOD_SENTRY=0; MOD_NATS=0; MOD_GITHUB_ACTIONS=0
-        MOD_DRIZZLE=0; MOD_PRISMA=0; MOD_CLAUDE_CODE=0
+        for idx in "${SELECTABLE[@]}"; do
+          IFS='|' read -r _ _ varname <<< "${MODULES[$idx]}"
+          set_mod "$varname" 0
+        done
         ;;
-      q|Q) echo "Aborted."; exit 0 ;;
-      "") break ;;
+      q|Q)
+        echo -ne "\033[?25h"
+        echo "Aborted."
+        exit 0
+        ;;
+      ENTER)
+        echo -ne "\033[?25h"
+        break
+        ;;
     esac
   done
 }
