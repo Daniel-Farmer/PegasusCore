@@ -93,12 +93,13 @@ MODULES=(
   "Claude Code|AI coding assistant on the server|CLAUDE_CODE"
 )
 
-# Build list of selectable indices (skip section headers)
+# Build list of selectable indices (skip section headers) + install button
 SELECTABLE=()
 for i in "${!MODULES[@]}"; do
   IFS='|' read -r name _ _ <<< "${MODULES[$i]}"
   [[ -n "$name" ]] && SELECTABLE+=("$i")
 done
+SELECTABLE+=("INSTALL")  # Last item is the install button
 
 CURSOR=0  # index into SELECTABLE array
 
@@ -141,7 +142,7 @@ draw_menu() {
   echo -e "    ${GREEN}[x]${NC} Next.js app            ${GREEN}[x]${NC} Flowise (agent builder)"
   echo -e "    ${GREEN}[x]${NC} Supabase (cloud)"
   echo ""
-  echo -e "  ${YELLOW}Use arrows to navigate, space to toggle, Enter to install:${NC}"
+  echo -e "  ${YELLOW}Use arrows to navigate, Enter to toggle:${NC}"
   echo ""
 
   local sel_idx=0
@@ -170,6 +171,15 @@ draw_menu() {
       echo -e "    [${check}] ${name}  ${DIM}— ${desc}${NC}"
     fi
   done
+
+  echo ""
+
+  # "Install" button at the bottom — selectable
+  if [[ ${SELECTABLE[$CURSOR]} == "INSTALL" ]]; then
+    echo -e "  ${GREEN}${BOLD}  >>> [ INSTALL ] <<<${NC}"
+  else
+    echo -e "  ${DIM}      [ INSTALL ]${NC}"
+  fi
 
   echo ""
   echo -e "  ${DIM}[a] select all  [n] select none  [q] quit${NC}"
@@ -215,19 +225,25 @@ select_modules() {
         CURSOR=$(( CURSOR + 1 ))
         [[ $CURSOR -ge ${#SELECTABLE[@]} ]] && CURSOR=0
         ;;
-      SPACE)
-        local idx=${SELECTABLE[$CURSOR]}
-        IFS='|' read -r _ _ varname <<< "${MODULES[$idx]}"
+      ENTER|SPACE)
+        local sel=${SELECTABLE[$CURSOR]}
+        if [[ "$sel" == "INSTALL" ]]; then
+          echo -ne "\033[?25h"
+          break
+        fi
+        IFS='|' read -r _ _ varname <<< "${MODULES[$sel]}"
         toggle_mod "$varname"
         ;;
       a|A)
         for idx in "${SELECTABLE[@]}"; do
+          [[ "$idx" == "INSTALL" ]] && continue
           IFS='|' read -r _ _ varname <<< "${MODULES[$idx]}"
           set_mod "$varname" 1
         done
         ;;
       n|N)
         for idx in "${SELECTABLE[@]}"; do
+          [[ "$idx" == "INSTALL" ]] && continue
           IFS='|' read -r _ _ varname <<< "${MODULES[$idx]}"
           set_mod "$varname" 0
         done
@@ -236,10 +252,6 @@ select_modules() {
         echo -ne "\033[?25h"
         echo "Aborted."
         exit 0
-        ;;
-      ENTER)
-        echo -ne "\033[?25h"
-        break
         ;;
     esac
   done
