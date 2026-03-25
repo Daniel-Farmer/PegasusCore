@@ -18,6 +18,7 @@ const stack = [
     logo: "/logos/flowise.png",
     title: "Flowise",
     description: "Visual builder for AI agents, RAG, and workflows",
+    wide: true,
   },
   {
     logo: "/logos/supabase.png",
@@ -152,9 +153,9 @@ export default function HomePage() {
                   <Image
                     src={item.logo}
                     alt={item.title}
-                    width={48}
+                    width={"wide" in item && item.wide ? 120 : 48}
                     height={48}
-                    className={`mb-4 h-12 w-12 rounded-lg object-contain${"invert" in item && item.invert ? " invert" : ""}`}
+                    className={`mb-4 ${"wide" in item && item.wide ? "h-12 w-auto" : "h-12 w-12"} rounded-lg object-contain${"invert" in item && item.invert ? " invert" : ""}`}
                   />
                   <h3 className="text-sm font-semibold">{item.title}</h3>
                   <p className="mt-2 text-xs leading-relaxed text-white/40">
