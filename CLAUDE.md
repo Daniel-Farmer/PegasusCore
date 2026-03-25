@@ -1,14 +1,14 @@
 # CLAUDE.md — AI Development Guide
 
 ## Project Overview
-Pegasus Starter Pack — a universal full-stack starter template.
+Pegasus Core — a fully self-hosted AI-powered full-stack starter kit.
 
 ## Tech Stack
 - Next.js 15 (App Router, Server Components, TypeScript strict)
 - Supabase self-hosted (`@supabase/ssr` + `@supabase/supabase-js`) — auth, DB, storage, pgvector
 - Bifrost (github.com/maximhq/bifrost) — AI gateway, OpenAI-compatible API
 - Flowise (`flowise-sdk`) — visual AI agent builder
-- Coolify — self-hosted PaaS (deployment, management)
+- PM2 — process management + auto-restart
 - Tailwind CSS + shadcn/ui
 
 ## Key Patterns
@@ -63,6 +63,7 @@ Enabled via `./install.sh` interactive menu. Configs pre-shipped in `modules/`.
 | BullMQ | Job queues for async AI pipelines | Redis |
 | Sentry | Error tracking + performance monitoring | — |
 | Traefik | Reverse proxy + automatic SSL | Docker, domain |
+| Coolify | Self-hosted PaaS for deployment management | Docker |
 
 ### Module file locations
 - `modules/redis/docker-compose.yml` — Redis container

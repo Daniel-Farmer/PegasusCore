@@ -32,9 +32,10 @@ const stack = [
     invert: true,
   },
   {
-    logo: "/logos/coolify.svg",
-    title: "Coolify",
-    description: "Self-hosted PaaS — deploy, manage, and scale",
+    logo: "/logos/pm2.png",
+    title: "PM2",
+    description: "Process manager — auto-restart, logs, and monitoring",
+    invert: true,
   },
 ];
 
