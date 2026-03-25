@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n next,bifrost,flowise -c cyan,magenta,yellow \"next dev\" \"npx -y @maximhq/bifrost\" \"npx flowise start --port 3001\"",
+    "dev": "concurrently -n next,bifrost,flowise -c cyan,magenta,yellow \"next dev\" \"npx -y @maximhq/bifrost\" \"PORT=3001 npx flowise start\"",
     "dev:next": "next dev",
     "build": "next build",
     "start": "next start",
